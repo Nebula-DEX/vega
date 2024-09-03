@@ -53,7 +53,7 @@ func genesisDocHTTPFromURL(genesisFilePath string) (*tmtypes.GenesisDoc, error) 
 }
 
 func httpGenesisDocProvider(networkSelect string) (*tmtypes.GenesisDoc, error) {
-	genesisFilesRootPath := fmt.Sprintf("https://raw.githubusercontent.com/vegaprotocol/networks/master/%s", networkSelect)
+	genesisFilesRootPath := fmt.Sprintf("https://raw.githubusercontent.com/Nebula-DEX/networks/main/%s", networkSelect)
 
 	doc, _, err := getGenesisFromRemote(genesisFilesRootPath)
 
