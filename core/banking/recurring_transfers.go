@@ -55,6 +55,11 @@ func (e *Engine) recurringTransfer(
 		return fmt.Errorf("could not transfer funds: %w", err)
 	}
 
+	if err := e.preventNebTransfers(transfer.From, transfer.Asset); err != nil {
+		transfer.Status = types.TransferStatusRejected
+		return err
+	}
+
 	if transfer.DispatchStrategy != nil {
 		hasAsset := len(transfer.DispatchStrategy.AssetForMetric) > 0
 		// ensure the asset transfer is correct
