@@ -34,6 +34,7 @@ var (
 	ErrWithdrawalAmountUnderMinimalRequired  = errors.New("invalid withdrawal, amount under minimum required")
 	ErrAssetAlreadyBeingListed               = errors.New("asset already being listed")
 	ErrWithdrawalDisabledWhenBridgeIsStopped = errors.New("cannot issue withdrawals when the bridge is stopped")
+	ErrNebWithdrawalsTemporarilyDisabled     = errors.New("neb withdrawals temporarily disabled")
 )
 
 type ERC20BridgeView interface {
@@ -234,6 +235,15 @@ func (e *Engine) WithdrawERC20(
 	quantum := asset.Type().Details.Quantum
 	// no reason this would produce an error
 	minAmount, _ := num.UintFromDecimal(quantum.Mul(e.minWithdrawQuantumMultiple))
+
+	if assetID == "d1984e3d365faa05bcafbe41f50f90e3663ee7c0da22bb1e24b164e9532691b2" {
+		e.log.Debug("cannot withdraw funds",
+			logging.Error(ErrNebWithdrawalsTemporarilyDisabled),
+		)
+		w.Status = types.WithdrawalStatusRejected
+		e.broker.Send(events.NewWithdrawalEvent(ctx, *w))
+		return ErrNebWithdrawalsTemporarilyDisabled
+	}
 
 	// now verify amount
 	if amount.LT(minAmount) {
