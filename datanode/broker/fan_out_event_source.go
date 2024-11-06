@@ -129,8 +129,8 @@ func (e *fanOutEventSource) sendEvents(ctx context.Context) {
 			ok = firstBlockFirstEvent || sameBlockNextEvent || nextBlockFirstEvent || firstBlockAgain
 
 			if !ok {
-				panic(fmt.Sprintf("non-contiguous event stream: last: %d-%d, received: %d-%d",
-					prevBlock, prevSeq, event.BlockNr(), event.Sequence()))
+				panic(fmt.Sprintf("non-contiguous event stream: last: %d-%d, received: %d-%d, eventType(%v) event(%v)",
+					prevBlock, prevSeq, event.BlockNr(), event.Sequence(), event.Type().String(), event.StreamMessage().String()))
 			}
 
 			// if this is the first event, then this gives 0 + 1 for normal events, next will be 2
