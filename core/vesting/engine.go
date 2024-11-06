@@ -220,7 +220,7 @@ func (e *Engine) updateStakingAccount(
 		EthereumAddress: "",
 	}
 
-	e.stakeAccounting.AddEvent(context.Background(), stakeLinking)
+	e.stakeAccounting.AddEvent(ctx, stakeLinking)
 	brokerFunc(events.NewStakeLinking(ctx, *stakeLinking))
 }
 
